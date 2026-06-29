@@ -25,6 +25,10 @@ IN Tie Condition :
 
 - As A Player I want to be Notified Immediately When All Spaces get chosen and no one connects 4 in a Row , Column Or Diagonal.
 
+IN LOSE Condition :
+
+- As A player I Want to Be Notified Immediately When the Computer Connects 4 a Row , Column Or Diagonal Before Me.
+
 ## Screenshots
 
 ## Future Enhancements
