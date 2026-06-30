@@ -9,6 +9,14 @@
   justify-content: center;
   align-items: center;
   z-index: 9999;
+  position: fixed;
+  inset: 0;
+
+  background: url("../Night-sky-background.png") center center / cover no-repeat;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .welcome-content {
@@ -36,6 +44,7 @@
     0 20px 30px rgba(0, 0, 0, 0.25);
   text-shadow: 0 4px 0 rgba(0, 0, 0, 0.15);
 }
+
 @import url("https://fonts.googleapis.com/css2?family=Michroma&display=swap");
 
 .welcome-subtitle {
