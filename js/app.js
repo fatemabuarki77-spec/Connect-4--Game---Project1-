@@ -273,20 +273,15 @@ function checkWinner() {
 }
 
 function checkTie() {
-  if (winner !== false) return;
-  if (firstColumnElement.every((cell) => cell !== "")) {
-    tie = true;
-  }
-  if (secondColumnElement.every((cell) => cell !== "")) {
-    tie = true;
-  }
-  if (thirdColumnElement.every((cell) => cell !== "")) {
-    tie = true;
-  }
-  if (fourthColumnElement.every((cell) => cell !== "")) {
-    tie = true;
-  }
-  if (fifthColumnElement.every((cell) => cell !== "")) {
+  if (winner) return;
+
+  if (
+    firstColumnElement.length === 5 &&
+    secondColumnElement.length === 5 &&
+    thirdColumnElement.length === 5 &&
+    fourthColumnElement.length === 5 &&
+    fifthColumnElement.length === 5
+  ) {
     tie = true;
   }
 
@@ -323,6 +318,41 @@ function updateStatus() {
     statusEl.textContent = `Player ${turn}'s Turn`;
   }
 }
+/*------------------------ Computer Player ------------------------
+
+function computerMove() {
+  if (winner || tie) return;
+
+  let availableColumns = [];
+
+  for (let i = 0; i < COLS; i++) {
+    if (board[i].length < ROWS) {
+      availableColumns.push(i);
+    }
+  }
+
+  let choice =
+    availableColumns[Math.floor(Math.random() * availableColumns.length)];
+
+  dropPiece(choice, "YELLOW");
+
+  if (checkWinner("YELLOW")) {
+    winner = true;
+    turn = YELLOW;
+    updateStatus();
+    return;
+  }
+
+  if (checkTie()) {
+    tie = true;
+    updateStatus();
+    return;
+  }
+
+  turn = RED;
+
+  updateStatus();
+}*/
 
 checkWinner();
 checkTie();
@@ -356,6 +386,7 @@ firstColumnEl.forEach((cell) => {
     });
     checkWinner();
     switchPlayerTurn();
+    checkTie();
   });
 });
 
@@ -383,6 +414,7 @@ secondColumnEl.forEach((cell) => {
     });
     checkWinner();
     switchPlayerTurn();
+    checkTie();
   });
 });
 
@@ -409,6 +441,7 @@ thirdColumnEl.forEach((cell) => {
     });
     checkWinner();
     switchPlayerTurn();
+    checkTie();
   });
 });
 
@@ -436,6 +469,7 @@ fourthColumnEl.forEach((cell) => {
     });
     checkWinner();
     switchPlayerTurn();
+    checkTie();
   });
 });
 
@@ -462,6 +496,7 @@ fifthColumnEl.forEach((cell) => {
     });
     checkWinner();
     switchPlayerTurn();
+    checkTie();
   });
 });
 
