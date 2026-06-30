@@ -11,11 +11,6 @@ const statusEl = document.querySelector(`#status`);
 const welcomeScreen = document.querySelector("#welcome-screen");
 const startBtn = document.querySelector("#start-btn");
 const mainGameContainer = document.querySelector(".game-container");
-console.log(firstColumnEl);
-console.log(secondColumnEl);
-console.log(thirdColumnEl);
-console.log(fourthColumnEl);
-console.log(fifthColumnEl);
 /*-------------------------------- Constants --------------------------------*/
 const rows = 5;
 const colms = 5;
@@ -52,7 +47,6 @@ const winningCombos = [
   [3, 7, 11, 15],
   [9, 13, 17, 21],
 ];
-
 /*---------------------------- Variables (state) ----------------------------*/
 let turn = "🔴";
 let winner = false;
@@ -68,42 +62,103 @@ function init() {
   board = Array(rows * colms).fill("");
   winner = false;
   tie = false;
-  turn = "🔴";
+  turn = "🔴" || "🟡";
+  render();
 }
 
-function checkWinner() {
-  winningCombos.forEach((combo) => {
-    const a = board[combo[0]];
-    const b = board[combo[1]];
-    const c = board[combo[2]];
-    const d = board[combo[3]];
+function render() {
+  updateStatus();
+  updateBoard();
+}
 
-    if (a && a === b && a === c && a === d) {
-      winner = true;
+function updateBoard() {
+  board.forEach((cell, index) => {
+    const cellEl = cellElement[index];
+
+    if (cellEl) {
+      cellEl.textContent = cell;
+      if (cell === "") {
+        cellEl.style.backgroundColor = "";
+      }
     }
   });
 }
-function checkTie() {
-  if (winner !== false) return;
-  if (board.every((cell) => cell !== "")) {
-    tie = true;
-  }
+
+/*function updateBoard() {
+  board.forEach((cell, index) => {
+    const cellEl = cellElement[index];
+
+    console.log(cellEl);
+    cellElement[index].textContent = cell;
+  });
+}*/
+
+/*function handleClick(event) {
+  console.log("hii");
+  const cellIndex = event.target.id;
+
+  if (board[cellIndex] === "🔴" || board[cellIndex] === "🟡") return;
+  if (winner) return;
+}*/
+
+function checkWinner() {
+  winningCombos.forEach((combo) => {
+    const a = firstColumnElement[combo[0]];
+    const b = firstColumnElement[combo[1]];
+    const c = firstColumnElement[combo[2]];
+    const d = firstColumnElement[combo[3]];
+    const e = secondColumnElement[combo[0]];
+    const f = secondColumnElement[combo[1]];
+    const g = secondColumnElement[combo[2]];
+    const h = secondColumnElement[combo[3]];
+    const i = thirdColumnElement[combo[0]];
+    const j = thirdColumnElement[combo[1]];
+    const k = thirdColumnElement[combo[2]];
+    const l = thirdColumnElement[combo[3]];
+    const m = fourthColumnElement[combo[0]];
+    const n = fourthColumnElement[combo[1]];
+    const o = fourthColumnElement[combo[2]];
+    const p = fourthColumnElement[combo[3]];
+    const q = fifthColumnElement[combo[0]];
+    const r = fifthColumnElement[combo[1]];
+    const s = fifthColumnElement[combo[2]];
+    const t = fifthColumnElement[combo[3]];
+    if (a && a === b && a === c && a === d) {
+      winner = true;
+    } else if (e && e === f && e === g && e === h) {
+      winner = true;
+    } else if (i && i === j && i === k && i === l) {
+      winner = true;
+    } else if (m && m === n && m === o && m === p) {
+      winner = true;
+    } else if (q && q === r && q === s && q === t) {
+      winner = true;
+    }
+  });
+
+  updateStatus();
 }
 
-/*function checkWinner() {
-  for (let combo of winningCombos) {
-    const [a, b, c, d] = combo;
-    if (
-      board[a] !== "" &&
-      board[a] === board[b] &&
-      board[a] === board[c] &&
-      board[a] === board[d]
-    ) {
-      winner = true;
-      return;
-    }
+function checkTie() {
+  if (winner !== false) return;
+  if (firstColumnElement.every((cell) => cell !== "")) {
+    tie = true;
   }
-}*/
+  if (secondColumnElement.every((cell) => cell !== "")) {
+    tie = true;
+  }
+  if (thirdColumnElement.every((cell) => cell !== "")) {
+    tie = true;
+  }
+  if (fourthColumnElement.every((cell) => cell !== "")) {
+    tie = true;
+  }
+  if (fifthColumnElement.every((cell) => cell !== "")) {
+    tie = true;
+  }
+
+  updateStatus();
+}
 
 function switchPlayerTurn() {
   if (winner !== false) return;
@@ -114,9 +169,12 @@ function switchPlayerTurn() {
   } else {
     turn = "🔴";
   }
+  updateStatus();
 }
 
 function updateStatus() {
+  console.log("winner is:", winner);
+
   if (winner) {
     if (turn === "🔴") {
       statusEl.textContent = "🎉 Player 🔴 WINS! 🎉";
@@ -137,6 +195,7 @@ checkWinner();
 checkTie();
 updateStatus();
 switchPlayerTurn();
+render();
 /*----------------------------- Event Listeners -----------------------------*/
 resetBtn.addEventListener("click", init);
 startBtn.addEventListener("click", () => {
@@ -146,36 +205,31 @@ startBtn.addEventListener("click", () => {
 
 firstColumnEl.forEach((cell) => {
   cell.addEventListener("click", (event) => {
+    if (winner) return;
     const gridIndex = event.target.id;
 
     if (turn === "🔴") {
       firstColumnElement.push("RED");
-      console.log(firstColumnElement);
     } else if (turn === "🟡") {
       firstColumnElement.push("YELLOW");
-      console.log(firstColumnElement);
     }
     console.log(firstColumnElement);
     console.log(`Cell ${gridIndex} successfully clicked!`);
 
     firstColumnElement.forEach((element, index) => {
-      console.log("in for");
       if (element === "RED") firstColumnEl[index].style.backgroundColor = "red";
       else if (element === "YELLOW")
         firstColumnEl[index].style.backgroundColor = "yellow";
     });
-
+    checkWinner();
     switchPlayerTurn();
-  });
-});
-secondColumnEl.forEach((cell) => {
-  cell.addEventListener("click", (event) => {
-    const gridIndex = event.target.id;
+    checkTie();
   });
 });
 
 secondColumnEl.forEach((cell) => {
   cell.addEventListener("click", (event) => {
+    if (winner) return;
     const gridIndex = event.target.id;
 
     if (turn === "🔴") {
@@ -195,13 +249,15 @@ secondColumnEl.forEach((cell) => {
       else if (element === "YELLOW")
         secondColumnEl[index].style.backgroundColor = "yellow";
     });
-
+    checkWinner();
     switchPlayerTurn();
+    checkTie();
   });
 });
 
 thirdColumnEl.forEach((cell) => {
   cell.addEventListener("click", (event) => {
+    if (winner) return;
     const gridIndex = event.target.id;
 
     if (turn === "🔴") {
@@ -220,13 +276,15 @@ thirdColumnEl.forEach((cell) => {
       else if (element === "YELLOW")
         thirdColumnEl[index].style.backgroundColor = "yellow";
     });
-
+    checkWinner();
     switchPlayerTurn();
+    checkTie();
   });
 });
 
 fourthColumnEl.forEach((cell) => {
   cell.addEventListener("click", (event) => {
+    if (winner) return;
     const gridIndex = event.target.id;
 
     if (turn === "🔴") {
@@ -246,13 +304,15 @@ fourthColumnEl.forEach((cell) => {
       else if (element === "YELLOW")
         fourthColumnEl[index].style.backgroundColor = "yellow";
     });
-
+    checkWinner();
     switchPlayerTurn();
+    checkTie();
   });
 });
 
 fifthColumnEl.forEach((cell) => {
   cell.addEventListener("click", (event) => {
+    if (winner) return;
     const gridIndex = event.target.id;
 
     if (turn === "🔴") {
@@ -271,10 +331,10 @@ fifthColumnEl.forEach((cell) => {
       else if (element === "YELLOW")
         fifthColumnEl[index].style.backgroundColor = "yellow";
     });
-
+    checkWinner();
     switchPlayerTurn();
+    checkTie();
   });
 });
 
 init();
-updateStatus();
