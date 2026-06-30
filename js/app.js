@@ -52,44 +52,177 @@ let turn = "🔴";
 let winner = false;
 let tie = false;
 let board = [];
-const firstColumnElement = [];
-const secondColumnElement = [];
-const thirdColumnElement = [];
-const fourthColumnElement = [];
-const fifthColumnElement = [];
+let firstColumnElement = [];
+let secondColumnElement = [];
+let thirdColumnElement = [];
+let fourthColumnElement = [];
+let fifthColumnElement = [];
 /*-------------------------------- Functions --------------------------------*/
 function init() {
   board = Array(rows * colms).fill("");
+  firstColumnElement = [];
+  secondColumnElement = [];
+  thirdColumnElement = [];
+  fourthColumnElement = [];
+  fifthColumnElement = [];
+
   winner = false;
   tie = false;
-  turn = "🔴" || "🟡";
+  turn = "🔴";
+  console.log("hi");
   render();
+}
+
+function checkWinner2(player) {
+  const cols = board.length;
+
+  for (let c = 0; c < cols; c++) {
+    const rows = board[c].length;
+
+    for (let r = 0; r < rows; r++) {
+      // Horizontal →
+      if (
+        c <= cols - 4 &&
+        board[c][r] === player &&
+        board[c + 1][r] === player &&
+        board[c + 2][r] === player &&
+        board[c + 3][r] === player
+      )
+        return true;
+
+      // Vertical ↑
+      if (
+        r <= rows - 4 &&
+        board[c][r] === player &&
+        board[c][r + 1] === player &&
+        board[c][r + 2] === player &&
+        board[c][r + 3] === player
+      )
+        return true;
+
+      // Diagonal ↗
+      if (
+        c <= cols - 4 &&
+        board[c][r] === player &&
+        board[c + 1][r + 1] === player &&
+        board[c + 2][r + 2] === player &&
+        board[c + 3][r + 3] === player
+      )
+        return true;
+
+      // Diagonal ↘
+      if (
+        c <= cols - 4 &&
+        r >= 3 &&
+        board[c][r] === player &&
+        board[c + 1][r - 1] === player &&
+        board[c + 2][r - 2] === player &&
+        board[c + 3][r - 3] === player
+      )
+        return true;
+    }
+  }
+
+  return false;
 }
 
 function render() {
   updateStatus();
   updateBoard();
 }
-
 function updateBoard() {
   board.forEach((cell, index) => {
     const cellEl = cellElement[index];
-
     if (cellEl) {
-      cellEl.textContent = cell;
-      if (cell === "") {
+      if (cell === "🔴") {
+        cellEl.style.backgroundColor = "red";
+        cellEl.textContent = "🔴";
+      } else if (cell === "🟡") {
+        cellEl.style.backgroundColor = "yellow";
+        cellEl.textContent = "🟡";
+      } else {
         cellEl.style.backgroundColor = "";
+        cellEl.textContent = "";
       }
     }
   });
 }
 
-/*function updateBoard() {
-  board.forEach((cell, index) => {
+/*firstColumnElement.forEach((cell, index) => {
     const cellEl = cellElement[index];
+    if (cellEl) {
+      if (cell === "🔴") {
+        cellEl.style.backgroundColor = "red";
+        cellEl.textContent = "🔴";
+      } else if (cell === "🟡") {
+        cellEl.style.backgroundColor = "yellow";
+        cellEl.textContent = "🟡";
+      } else {
+        cellEl.style.backgroundColor = "";
+        cellEl.textContent = "";
+      }
+    }
+  });
 
-    console.log(cellEl);
-    cellElement[index].textContent = cell;
+  secondColumnElement.forEach((cell, index) => {
+    const cellEl = cellElement[index];
+    if (cellEl) {
+      if (cell === "🔴") {
+        cellEl.style.backgroundColor = "red";
+        cellEl.textContent = "🔴";
+      } else if (cell === "🟡") {
+        cellEl.style.backgroundColor = "yellow";
+        cellEl.textContent = "🟡";
+      } else {
+        cellEl.style.backgroundColor = "";
+        cellEl.textContent = "";
+      }
+    }
+  });
+  thirdColumnElement.forEach((cell, index) => {
+    const cellEl = cellElement[index];
+    if (cellEl) {
+      if (cell === "🔴") {
+        cellEl.style.backgroundColor = "red";
+        cellEl.textContent = "🔴";
+      } else if (cell === "🟡") {
+        cellEl.style.backgroundColor = "yellow";
+        cellEl.textContent = "🟡";
+      } else {
+        cellEl.style.backgroundColor = "";
+        cellEl.textContent = "";
+      }
+    }
+  });
+  fourthColumnElement.forEach((cell, index) => {
+    const cellEl = cellElement[index];
+    if (cellEl) {
+      if (cell === "🔴") {
+        cellEl.style.backgroundColor = "red";
+        cellEl.textContent = "🔴";
+      } else if (cell === "🟡") {
+        cellEl.style.backgroundColor = "yellow";
+        cellEl.textContent = "🟡";
+      } else {
+        cellEl.style.backgroundColor = "";
+        cellEl.textContent = "";
+      }
+    }
+  });
+  fifthColumnElement.forEach((cell, index) => {
+    const cellEl = cellElement[index];
+    if (cellEl) {
+      if (cell === "🔴") {
+        cellEl.style.backgroundColor = "red";
+        cellEl.textContent = "🔴";
+      } else if (cell === "🟡") {
+        cellEl.style.backgroundColor = "yellow";
+        cellEl.textContent = "🟡";
+      } else {
+        cellEl.style.backgroundColor = "";
+        cellEl.textContent = "";
+      }
+    }
   });
 }*/
 
@@ -223,7 +356,6 @@ firstColumnEl.forEach((cell) => {
     });
     checkWinner();
     switchPlayerTurn();
-    checkTie();
   });
 });
 
@@ -251,7 +383,6 @@ secondColumnEl.forEach((cell) => {
     });
     checkWinner();
     switchPlayerTurn();
-    checkTie();
   });
 });
 
@@ -278,7 +409,6 @@ thirdColumnEl.forEach((cell) => {
     });
     checkWinner();
     switchPlayerTurn();
-    checkTie();
   });
 });
 
@@ -306,7 +436,6 @@ fourthColumnEl.forEach((cell) => {
     });
     checkWinner();
     switchPlayerTurn();
-    checkTie();
   });
 });
 
@@ -333,7 +462,6 @@ fifthColumnEl.forEach((cell) => {
     });
     checkWinner();
     switchPlayerTurn();
-    checkTie();
   });
 });
 
