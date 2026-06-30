@@ -73,59 +73,6 @@ function init() {
   render();
 }
 
-function checkWinner2(player) {
-  const cols = board.length;
-
-  for (let c = 0; c < cols; c++) {
-    const rows = board[c].length;
-
-    for (let r = 0; r < rows; r++) {
-      // Horizontal →
-      if (
-        c <= cols - 4 &&
-        board[c][r] === player &&
-        board[c + 1][r] === player &&
-        board[c + 2][r] === player &&
-        board[c + 3][r] === player
-      )
-        return true;
-
-      // Vertical ↑
-      if (
-        r <= rows - 4 &&
-        board[c][r] === player &&
-        board[c][r + 1] === player &&
-        board[c][r + 2] === player &&
-        board[c][r + 3] === player
-      )
-        return true;
-
-      // Diagonal ↗
-      if (
-        c <= cols - 4 &&
-        board[c][r] === player &&
-        board[c + 1][r + 1] === player &&
-        board[c + 2][r + 2] === player &&
-        board[c + 3][r + 3] === player
-      )
-        return true;
-
-      // Diagonal ↘
-      if (
-        c <= cols - 4 &&
-        r >= 3 &&
-        board[c][r] === player &&
-        board[c + 1][r - 1] === player &&
-        board[c + 2][r - 2] === player &&
-        board[c + 3][r - 3] === player
-      )
-        return true;
-    }
-  }
-
-  return false;
-}
-
 function render() {
   updateStatus();
   updateBoard();
@@ -233,8 +180,73 @@ function updateBoard() {
   if (board[cellIndex] === "🔴" || board[cellIndex] === "🟡") return;
   if (winner) return;
 }*/
-
 function checkWinner() {
+  const currentBoardState = [
+    firstColumnElement,
+    secondColumnElement,
+    thirdColumnElement,
+    fourthColumnElement,
+    fifthColumnElement,
+  ];
+
+  const cols = currentBoardState.length; // 5 columns
+
+  // 2. Loop through every slot to check all directions
+  for (let c = 0; c < cols; c++) {
+    const rowsCount = currentBoardState[c].length;
+
+    for (let r = 0; r < rowsCount; r++) {
+      const player = currentBoardState[c][r];
+      if (!player) continue; // Skip empty slots
+
+      // Horizontal Check → (Looks across adjacent columns at the same row index)
+      if (
+        c <= cols - 4 &&
+        currentBoardState[c + 1][r] === player &&
+        currentBoardState[c + 2][r] === player &&
+        currentBoardState[c + 3][r] === player
+      ) {
+        winner = true;
+        return;
+      }
+
+      // Vertical Check ↑ (Looks up within the same column)
+      if (
+        r <= rowsCount - 4 &&
+        currentBoardState[c][r + 1] === player &&
+        currentBoardState[c][r + 2] === player &&
+        currentBoardState[c][r + 3] === player
+      ) {
+        winner = true;
+        return;
+      }
+
+      // Diagonal Up Check ↗
+      if (
+        c <= cols - 4 &&
+        currentBoardState[c + 1][r + 1] === player &&
+        currentBoardState[c + 2][r + 2] === player &&
+        currentBoardState[c + 3][r + 3] === player
+      ) {
+        winner = true;
+        return;
+      }
+
+      // Diagonal Down Check ↘
+      if (
+        c <= cols - 4 &&
+        r >= 3 &&
+        currentBoardState[c + 1][r - 1] === player &&
+        currentBoardState[c + 2][r - 2] === player &&
+        currentBoardState[c + 3][r - 3] === player
+      ) {
+        winner = true;
+        return;
+      }
+    }
+  }
+}
+function checkWinner2() {
   winningCombos.forEach((combo) => {
     const a = firstColumnElement[combo[0]];
     const b = firstColumnElement[combo[1]];
@@ -294,6 +306,7 @@ function switchPlayerTurn() {
 
   if (turn === "🔴") {
     turn = "🟡";
+    // setTimeout(computerMove, 400);
   } else {
     turn = "🔴";
   }
@@ -318,47 +331,34 @@ function updateStatus() {
     statusEl.textContent = `Player ${turn}'s Turn`;
   }
 }
-/*------------------------ Computer Player ------------------------
+/*------------------------ Computer Player ------------------------*/
 
-function computerMove() {
-  if (winner || tie) return;
+/*function computerMove() {
+  if (winner || tie || turn !== "🟡") return;
+  const allCols = [
+    firstColumnEl,
+    secondColumnEl,
+    thirdColumnEl,
+    fourthColumnEl,
+    fifthColumnEl,
+  ];
+  const randomCol = allCols[Math.floor(Math.random() * allCols.length)];
 
-  let availableColumns = [];
-
-  for (let i = 0; i < COLS; i++) {
-    if (board[i].length < ROWS) {
-      availableColumns.push(i);
-    }
+  if (randomCol[0]) {
+    randomCol[0].click();
+  } else {
+    computerMove();
+    switchPlayerTurn();
   }
-
-  let choice =
-    availableColumns[Math.floor(Math.random() * availableColumns.length)];
-
-  dropPiece(choice, "YELLOW");
-
-  if (checkWinner("YELLOW")) {
-    winner = true;
-    turn = YELLOW;
-    updateStatus();
-    return;
-  }
-
-  if (checkTie()) {
-    tie = true;
-    updateStatus();
-    return;
-  }
-
-  turn = RED;
-
-  updateStatus();
 }*/
 
 checkWinner();
+checkWinner2();
 checkTie();
 updateStatus();
 switchPlayerTurn();
 render();
+
 /*----------------------------- Event Listeners -----------------------------*/
 resetBtn.addEventListener("click", init);
 startBtn.addEventListener("click", () => {
@@ -385,6 +385,7 @@ firstColumnEl.forEach((cell) => {
         firstColumnEl[index].style.backgroundColor = "yellow";
     });
     checkWinner();
+    checkWinner2();
     switchPlayerTurn();
     checkTie();
   });
@@ -413,6 +414,7 @@ secondColumnEl.forEach((cell) => {
         secondColumnEl[index].style.backgroundColor = "yellow";
     });
     checkWinner();
+    checkWinner2();
     switchPlayerTurn();
     checkTie();
   });
@@ -440,6 +442,7 @@ thirdColumnEl.forEach((cell) => {
         thirdColumnEl[index].style.backgroundColor = "yellow";
     });
     checkWinner();
+    checkWinner2();
     switchPlayerTurn();
     checkTie();
   });
@@ -468,6 +471,7 @@ fourthColumnEl.forEach((cell) => {
         fourthColumnEl[index].style.backgroundColor = "yellow";
     });
     checkWinner();
+    checkWinner2();
     switchPlayerTurn();
     checkTie();
   });
@@ -495,6 +499,7 @@ fifthColumnEl.forEach((cell) => {
         fifthColumnEl[index].style.backgroundColor = "yellow";
     });
     checkWinner();
+    checkWinner2();
     switchPlayerTurn();
     checkTie();
   });
