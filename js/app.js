@@ -1,7 +1,6 @@
 /*------------------------ Cached Element References ------------------------*/
 const boardElement = document.querySelectorAll(`.board`);
 const cellElement = document.querySelectorAll(`.cell`);
-const statusElement = document.querySelectorAll(`.status`);
 const resetBtn = document.querySelector(`#reset`);
 const firstColumnEl = document.querySelectorAll(".firstColumnCell");
 const secondColumnEl = document.querySelectorAll(".secondColumnCell");
@@ -9,69 +8,56 @@ const thirdColumnEl = document.querySelectorAll(".thirdColumnCell");
 const fourthColumnEl = document.querySelectorAll(".fourthColumnCell");
 const fifthColumnEl = document.querySelectorAll(".fifthColumnCell");
 const statusEl = document.querySelector(`#status`);
-console.log(typeof firstColumnEl);
+const welcomeScreen = document.querySelector("#welcome-screen");
+const startBtn = document.querySelector("#start-btn");
+const mainGameContainer = document.querySelector(".game-container");
+console.log(firstColumnEl);
 console.log(secondColumnEl);
 console.log(thirdColumnEl);
 console.log(fourthColumnEl);
 console.log(fifthColumnEl);
 /*-------------------------------- Constants --------------------------------*/
-const board = [
-  ``,
-  ``,
-  ``,
-  ``,
-  ``,
-  ``,
-  ``,
-  ``,
-  ``,
-  ``,
-  ``,
-  ``,
-  ``,
-  ``,
-  ``,
-  ``,
-  ``,
-  ``,
-  ``,
-  ``,
-  ``,
-  ``,
-  ``,
-  ``,
-  ``,
-  ``,
-  ``,
-  ``,
-  ``,
-  ``,
-];
 const rows = 5;
 const colms = 5;
 const winningCombos = [
+  // Horizontal
+  [0, 1, 2, 3],
+  [1, 2, 3, 4],
+  [5, 6, 7, 8],
   [6, 7, 8, 9],
-  ,
+  [10, 11, 12, 13],
   [11, 12, 13, 14],
-  ,
+  [15, 16, 17, 18],
   [16, 17, 18, 19],
-  ,
+  [20, 21, 22, 23],
   [21, 22, 23, 24],
-
+  // Vertical
+  [0, 5, 10, 15],
+  [5, 10, 15, 20],
+  [1, 6, 11, 16],
   [6, 11, 16, 21],
-  ,
+  [2, 7, 12, 17],
   [7, 12, 17, 22],
-  ,
+  [3, 8, 13, 18],
   [8, 13, 18, 23],
-  ,
+  [4, 9, 14, 19],
   [9, 14, 19, 24],
+  // Diagonal
+  [0, 6, 12, 18],
+  [6, 12, 18, 24],
+  [1, 7, 13, 19],
+  [5, 11, 17, 23],
+  [4, 8, 12, 16],
+  [8, 12, 16, 20],
+  [3, 7, 11, 15],
+  [9, 13, 17, 21],
 ];
 
 /*---------------------------- Variables (state) ----------------------------*/
-
 let turn = "🔴";
 let winner = false;
 let tie = false;
+let board = [];
 const firstColumnElement = [];
 const secondColumnElement = [];
 const thirdColumnElement = [];
@@ -79,25 +65,10 @@ const fourthColumnElement = [];
 const fifthColumnElement = [];
 /*-------------------------------- Functions --------------------------------*/
 function init() {
-  board.fill("");
+  board = Array(rows * colms).fill("");
   winner = false;
   tie = false;
   turn = "🔴";
-  render();
-}
-
-function isValid(r, c) {
-  return r >= 0 && r < rows && c >= 0 && c < colms;
-}
-
-function placePiece(index) {
-  board[index] = turn;
-  console.log(board);
-
-  if (!winner) return;
-}
-function dropPiece(colIndex) {
-  if (!winner) return;
 }
 
 function checkWinner() {
@@ -106,13 +77,33 @@ function checkWinner() {
     const b = board[combo[1]];
     const c = board[combo[2]];
     const d = board[combo[3]];
-    const e = board[combo[4]];
 
-    if (a && a === b && b === c && c === d && d === e) {
+    if (a && a === b && a === c && a === d) {
       winner = true;
     }
   });
 }
+function checkTie() {
+  if (winner !== false) return;
+  if (board.every((cell) => cell !== "")) {
+    tie = true;
+  }
+}
+
+/*function checkWinner() {
+  for (let combo of winningCombos) {
+    const [a, b, c, d] = combo;
+    if (
+      board[a] !== "" &&
+      board[a] === board[b] &&
+      board[a] === board[c] &&
+      board[a] === board[d]
+    ) {
+      winner = true;
+      return;
+    }
+  }
+}*/
 
 function switchPlayerTurn() {
   if (winner !== false) return;
@@ -124,39 +115,34 @@ function switchPlayerTurn() {
     turn = "🔴";
   }
 }
+
 function updateStatus() {
-  if (winner === false && tie === false) {
-    statusEl.textContent = `It's ${turn}'s turn!`;
-  } else if (winner === false && tie === true) {
-    statusEl.textContent = "It's a tie game!";
+  if (winner) {
+    if (turn === "🔴") {
+      statusEl.textContent = "🎉 Player 🔴 WINS! 🎉";
+      statusEl.style.color = "#e74c3c";
+    } else {
+      statusEl.textContent = "🎉 Player 🟡 WINS! 🎉";
+      statusEl.style.color = "#d0ab16";
+    }
+  } else if (tie) {
+    statusEl.textContent = "🤝 IT'S A TIE! 🤝";
+    statusEl.style.color = "#2e3334";
   } else {
-    statusEl.textContent = `Congratulations! Player ${turn} wins!`;
+    statusEl.textContent = `Player ${turn}'s Turn`;
   }
 }
 
-function handleClick(colIndex) {
-  if (winner === false) {
-    return;
-  }
-}
-function playerValue() {
-  if (currentPlayer === "Red") {
-    currentPlayer = "Yellow";
-  } else {
-    currentPlayer = "Red";
-  }
-  document.getElementById("status").textContent = currentPlayer + "'s Turn";
-}
-function render() {
-  switchPlayerTurn();
-  checkWinner();
-  handleClick();
-  placePiece();
-  render();
-}
-
+checkWinner();
+checkTie();
+updateStatus();
+switchPlayerTurn();
 /*----------------------------- Event Listeners -----------------------------*/
 resetBtn.addEventListener("click", init);
+startBtn.addEventListener("click", () => {
+  welcomeScreen.style.display = "none";
+  mainGameContainer.style.display = "flex";
+});
 
 firstColumnEl.forEach((cell) => {
   cell.addEventListener("click", (event) => {
@@ -178,8 +164,8 @@ firstColumnEl.forEach((cell) => {
       else if (element === "YELLOW")
         firstColumnEl[index].style.backgroundColor = "yellow";
     });
+
     switchPlayerTurn();
-    updateStatus();
   });
 });
 secondColumnEl.forEach((cell) => {
@@ -209,10 +195,11 @@ secondColumnEl.forEach((cell) => {
       else if (element === "YELLOW")
         secondColumnEl[index].style.backgroundColor = "yellow";
     });
+
     switchPlayerTurn();
-    updateStatus();
   });
 });
+
 thirdColumnEl.forEach((cell) => {
   cell.addEventListener("click", (event) => {
     const gridIndex = event.target.id;
@@ -233,10 +220,11 @@ thirdColumnEl.forEach((cell) => {
       else if (element === "YELLOW")
         thirdColumnEl[index].style.backgroundColor = "yellow";
     });
+
     switchPlayerTurn();
-    updateStatus();
   });
 });
+
 fourthColumnEl.forEach((cell) => {
   cell.addEventListener("click", (event) => {
     const gridIndex = event.target.id;
@@ -258,8 +246,8 @@ fourthColumnEl.forEach((cell) => {
       else if (element === "YELLOW")
         fourthColumnEl[index].style.backgroundColor = "yellow";
     });
+
     switchPlayerTurn();
-    updateStatus();
   });
 });
 
@@ -283,7 +271,10 @@ fifthColumnEl.forEach((cell) => {
       else if (element === "YELLOW")
         fifthColumnEl[index].style.backgroundColor = "yellow";
     });
+
     switchPlayerTurn();
-    updateStatus();
   });
 });
+
+init();
+updateStatus();

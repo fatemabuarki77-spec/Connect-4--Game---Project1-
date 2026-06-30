@@ -6,16 +6,25 @@
     <title>Document</title>
     <link rel="stylesheet" href="./CSS/style.css" />
     <script defer src="./js/app.js"></script>
+   
   </head>
 
   <body>
+   
     <main class="game-container">
       <header class="game-header">
         <h1 class="objective">Connect 4 To !!! Win !!!</h1>
-        <h2 class="status">`Player 1 🔴's Turn`</h2>
+        <h2 id="status">Player 1 🔴's Turn</h2>
       </header>
 
-      
+      <section>  
+         <div id="welcome-screen">
+  <div class="welcome-content">
+    <h1 class="welcome-title"> 🔴 Connect 4 🟡 </h1>
+    <p class="welcome-subtitle"> Get 4 tokens in a Row Vertically, Horizontally  OR  Diagonally to win!</p>
+    <button id="start-btn">Start Game</button>
+  </section>
+
       <section class="board">
         <div id="firstColumn">
           <div class="cell firstColumnCell" id="0"></div>
@@ -55,7 +64,7 @@
       </section>
     
     
-      <button id="reset">Reset Game</button>
+      <button id="reset">RESET GAME</button>
     
   </body>
 </html>
