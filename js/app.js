@@ -72,6 +72,8 @@ function init() {
   winner = false;
   tie = false;
   turn = "🔴";
+  yellowBtn.disabled = true;
+  redBtn.disabled = true;
   render();
 }
 
@@ -263,13 +265,12 @@ function computerMove() {
   ];
 
   let isValidMove = false;
-
   let randomCol;
-
   while (!isValidMove) {
     randomCol = [...allCols[Math.floor(Math.random() * allCols.length)]];
     console.log(randomCol);
     isValidMove = randomCol.some((el) => !el.style.backgroundColor);
+    console.log(isValidMove);
   }
 
   console.log("random column: ", randomCol);
@@ -289,6 +290,7 @@ function chooseColor() {
   }
   redBtn.disabled = true;
   yellowBtn.disabled = true;
+
   updateStatus();
 }
 
@@ -305,9 +307,15 @@ startBtn.addEventListener("click", () => {
   mainGameContainer.style.display = "flex";
 });
 
-yellowBtn.addEventListener("click", chooseColor);
+yellowBtn.addEventListener("click", () => {
+  yellowBtnBtn.classList.add("className");
+  chooseColor();
+});
 
-redBtn.addEventListener("click", chooseColor);
+redBtn.addEventListener("click", () => {
+  redBtn.classList.add("className");
+  chooseColor();
+});
 
 firstColumnEl.forEach((cell) => {
   cell.addEventListener("click", (event) => {
