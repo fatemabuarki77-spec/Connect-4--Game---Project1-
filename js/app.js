@@ -261,7 +261,18 @@ function computerMove() {
     fourthColumnEl,
     fifthColumnEl,
   ];
-  const randomCol = allCols[Math.floor(Math.random() * allCols.length)];
+
+  let isValidMove = false;
+
+  let randomCol;
+
+  while (!isValidMove) {
+    randomCol = [...allCols[Math.floor(Math.random() * allCols.length)]];
+    console.log(randomCol);
+    isValidMove = randomCol.some((el) => !el.style.backgroundColor);
+  }
+
+  console.log("random column: ", randomCol);
 
   if (randomCol[0]) {
     randomCol[0].click();
