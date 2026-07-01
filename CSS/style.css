@@ -17,14 +17,18 @@
   z-index: 9999;
   position: fixed;
   inset: 0;
-
-  background: url("../Night-sky-background.png") center center / cover no-repeat;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  background: url("../Night-sky-background.png"), repeat-x;
+  animation: moveBackground 20s linear infinite;
 }
 
+@keyframes moveBackground {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: -1000px 0;
+  }
+}
 .welcome-content {
   text-align: center;
   background: rgb(214, 241, 243);
