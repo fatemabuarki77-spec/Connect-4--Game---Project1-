@@ -11,8 +11,8 @@ const statusEl = document.querySelector(`#status`);
 const welcomeScreen = document.querySelector("#welcome-screen");
 const startBtn = document.querySelector("#start-btn");
 const mainGameContainer = document.querySelector(".game-container");
-const redBtn = document.querySelector(`#red`);
-const yellowBtn = document.querySelector(`#yellow`);
+const redBtn = document.querySelector("#red");
+const yellowBtn = document.querySelector("#yellow");
 /*-------------------------------- Constants --------------------------------*/
 const rows = 5;
 const colms = 5;
@@ -72,8 +72,8 @@ function init() {
   winner = false;
   tie = false;
   turn = "🔴";
-  yellowBtn.disabled = true;
-  redBtn.disabled = true;
+  redBtn.disabled = false;
+  yellowBtn.disabled = false;
   render();
 }
 
@@ -289,6 +289,7 @@ function chooseColor() {
     turn = "🔴";
   }
   redBtn.disabled = true;
+
   yellowBtn.disabled = true;
 
   updateStatus();
@@ -308,12 +309,12 @@ startBtn.addEventListener("click", () => {
 });
 
 yellowBtn.addEventListener("click", () => {
-  yellowBtnBtn.classList.add("className");
+  yellowBtn.classList.add("yellow");
   chooseColor();
 });
 
 redBtn.addEventListener("click", () => {
-  redBtn.classList.add("className");
+  redBtn.classList.add("red");
   chooseColor();
 });
 
@@ -459,5 +460,3 @@ fifthColumnEl.forEach((cell) => {
     checkTie();
   });
 });
-
-init();
