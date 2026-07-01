@@ -11,6 +11,8 @@ const statusEl = document.querySelector(`#status`);
 const welcomeScreen = document.querySelector("#welcome-screen");
 const startBtn = document.querySelector("#start-btn");
 const mainGameContainer = document.querySelector(".game-container");
+const redBtn = document.querySelector(`#red`);
+const yellowBtn = document.querySelector(`#yellow`);
 /*-------------------------------- Constants --------------------------------*/
 const rows = 5;
 const colms = 5;
@@ -57,6 +59,7 @@ let secondColumnElement = [];
 let thirdColumnElement = [];
 let fourthColumnElement = [];
 let fifthColumnElement = [];
+let playerTurn = true;
 /*-------------------------------- Functions --------------------------------*/
 function init() {
   board = Array(rows * colms).fill("");
@@ -69,7 +72,6 @@ function init() {
   winner = false;
   tie = false;
   turn = "🔴";
-  console.log("hi");
   render();
 }
 
@@ -77,6 +79,7 @@ function render() {
   updateStatus();
   updateBoard();
 }
+
 function updateBoard() {
   board.forEach((cell, index) => {
     const cellEl = cellElement[index];
@@ -95,91 +98,6 @@ function updateBoard() {
   });
 }
 
-/*firstColumnElement.forEach((cell, index) => {
-    const cellEl = cellElement[index];
-    if (cellEl) {
-      if (cell === "🔴") {
-        cellEl.style.backgroundColor = "red";
-        cellEl.textContent = "🔴";
-      } else if (cell === "🟡") {
-        cellEl.style.backgroundColor = "yellow";
-        cellEl.textContent = "🟡";
-      } else {
-        cellEl.style.backgroundColor = "";
-        cellEl.textContent = "";
-      }
-    }
-  });
-
-  secondColumnElement.forEach((cell, index) => {
-    const cellEl = cellElement[index];
-    if (cellEl) {
-      if (cell === "🔴") {
-        cellEl.style.backgroundColor = "red";
-        cellEl.textContent = "🔴";
-      } else if (cell === "🟡") {
-        cellEl.style.backgroundColor = "yellow";
-        cellEl.textContent = "🟡";
-      } else {
-        cellEl.style.backgroundColor = "";
-        cellEl.textContent = "";
-      }
-    }
-  });
-  thirdColumnElement.forEach((cell, index) => {
-    const cellEl = cellElement[index];
-    if (cellEl) {
-      if (cell === "🔴") {
-        cellEl.style.backgroundColor = "red";
-        cellEl.textContent = "🔴";
-      } else if (cell === "🟡") {
-        cellEl.style.backgroundColor = "yellow";
-        cellEl.textContent = "🟡";
-      } else {
-        cellEl.style.backgroundColor = "";
-        cellEl.textContent = "";
-      }
-    }
-  });
-  fourthColumnElement.forEach((cell, index) => {
-    const cellEl = cellElement[index];
-    if (cellEl) {
-      if (cell === "🔴") {
-        cellEl.style.backgroundColor = "red";
-        cellEl.textContent = "🔴";
-      } else if (cell === "🟡") {
-        cellEl.style.backgroundColor = "yellow";
-        cellEl.textContent = "🟡";
-      } else {
-        cellEl.style.backgroundColor = "";
-        cellEl.textContent = "";
-      }
-    }
-  });
-  fifthColumnElement.forEach((cell, index) => {
-    const cellEl = cellElement[index];
-    if (cellEl) {
-      if (cell === "🔴") {
-        cellEl.style.backgroundColor = "red";
-        cellEl.textContent = "🔴";
-      } else if (cell === "🟡") {
-        cellEl.style.backgroundColor = "yellow";
-        cellEl.textContent = "🟡";
-      } else {
-        cellEl.style.backgroundColor = "";
-        cellEl.textContent = "";
-      }
-    }
-  });
-}*/
-
-/*function handleClick(event) {
-  console.log("hii");
-  const cellIndex = event.target.id;
-
-  if (board[cellIndex] === "🔴" || board[cellIndex] === "🟡") return;
-  if (winner) return;
-}*/
 function checkWinner() {
   const currentBoardState = [
     firstColumnElement,
@@ -191,13 +109,12 @@ function checkWinner() {
 
   const cols = currentBoardState.length; // 5 columns
 
-  // 2. Loop through every slot to check all directions
   for (let c = 0; c < cols; c++) {
     const rowsCount = currentBoardState[c].length;
 
     for (let r = 0; r < rowsCount; r++) {
       const player = currentBoardState[c][r];
-      if (!player) continue; // Skip empty slots
+      if (!player) continue;
 
       // Horizontal Check → (Looks across adjacent columns at the same row index)
       if (
@@ -303,12 +220,14 @@ function checkTie() {
 function switchPlayerTurn() {
   if (winner !== false) return;
   console.log("turn");
-
   if (turn === "🔴") {
     turn = "🟡";
-    // setTimeout(computerMove, 400);
-  } else {
+  } else if (turn === "🟡") {
     turn = "🔴";
+  }
+  playerTurn = false;
+  if (playerTurn === false) {
+    setTimeout(computerMove, 400);
   }
   updateStatus();
 }
@@ -333,8 +252,8 @@ function updateStatus() {
 }
 /*------------------------ Computer Player ------------------------*/
 
-/*function computerMove() {
-  if (winner || tie || turn !== "🟡") return;
+function computerMove() {
+  if (winner || tie || playerTurn === true) return;
   const allCols = [
     firstColumnEl,
     secondColumnEl,
@@ -346,17 +265,26 @@ function updateStatus() {
 
   if (randomCol[0]) {
     randomCol[0].click();
-  } else {
-    computerMove();
-    switchPlayerTurn();
   }
-}*/
+
+  playerTurn = true;
+}
+
+function chooseColor() {
+  if (turn === "🔴") {
+    turn = "🟡";
+  } else {
+    turn = "🔴";
+  }
+  redBtn.disabled = true;
+  yellowBtn.disabled = true;
+  updateStatus();
+}
 
 checkWinner();
 checkWinner2();
 checkTie();
 updateStatus();
-switchPlayerTurn();
 render();
 
 /*----------------------------- Event Listeners -----------------------------*/
@@ -365,6 +293,10 @@ startBtn.addEventListener("click", () => {
   welcomeScreen.style.display = "none";
   mainGameContainer.style.display = "flex";
 });
+
+yellowBtn.addEventListener("click", chooseColor);
+
+redBtn.addEventListener("click", chooseColor);
 
 firstColumnEl.forEach((cell) => {
   cell.addEventListener("click", (event) => {
@@ -380,9 +312,11 @@ firstColumnEl.forEach((cell) => {
     console.log(`Cell ${gridIndex} successfully clicked!`);
 
     firstColumnElement.forEach((element, index) => {
-      if (element === "RED") firstColumnEl[index].style.backgroundColor = "red";
-      else if (element === "YELLOW")
+      if (element === "RED") {
+        firstColumnEl[index].style.backgroundColor = "red";
+      } else if (element === "YELLOW") {
         firstColumnEl[index].style.backgroundColor = "yellow";
+      }
     });
     checkWinner();
     checkWinner2();
@@ -494,9 +428,11 @@ fifthColumnEl.forEach((cell) => {
 
     fifthColumnElement.forEach((element, index) => {
       console.log("in for");
-      if (element === "RED") fifthColumnEl[index].style.backgroundColor = "red";
-      else if (element === "YELLOW")
+      if (element === "RED") {
+        fifthColumnEl[index].style.backgroundColor = "red";
+      } else if (element === "YELLOW") {
         fifthColumnEl[index].style.backgroundColor = "yellow";
+      }
     });
     checkWinner();
     checkWinner2();

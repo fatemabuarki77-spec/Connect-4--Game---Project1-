@@ -1,3 +1,10 @@
+@import url("https://fonts.googleapis.com/css2?family=Michroma&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Bitcount+Single:wght@100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Ribeye+Marrow&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Ribeye&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Racing+Sans+One&display=swap");
+
 #welcome-screen {
   position: fixed;
   top: 0;
@@ -31,7 +38,7 @@
 
 .welcome-title {
   font-size: 2.5rem;
-  font-family: "Poppins", sans-serif;
+  font-family: "Ribeye Marrow", serif !important;
   font-weight: 900;
   color: #ffffff;
   background: #407de0;
@@ -44,8 +51,6 @@
     0 20px 30px rgba(0, 0, 0, 0.25);
   text-shadow: 0 4px 0 rgba(0, 0, 0, 0.15);
 }
-
-@import url("https://fonts.googleapis.com/css2?family=Michroma&display=swap");
 
 .welcome-subtitle {
   font-family: "Michroma", sans-serif;
@@ -66,6 +71,7 @@
   height: 150px;
   font-size: 2rem;
   font-weight: bold;
+  font-family: "Racing Sans One", sans-serif;
   color: white;
   background-color: #b31111;
   border: 2px solid #efbbbb;
@@ -78,10 +84,10 @@
 }
 
 #start-btn:hover {
-  background-color: #ef4444;
+  background-color: #089b1b;
   transform: translateY(-3px);
   box-shadow:
-    0 10px 0 #c51313,
+    0 10px 0 #229505,
     0 18px 25px rgba(0, 0, 0, 0.4);
 }
 
@@ -117,14 +123,16 @@ body {
 }
 
 .objective {
-  color: #1a1a1a;
+  color: #1c1c23;
   font-size: 2.2rem;
   margin-bottom: 8px;
-  font-weight: 700;
+  letter-spacing: 8px;
+  font-weight: 300;
+  font-family: "Silkscreen" !important;
 }
 
 #status {
-  color: #555;
+  color: #4e4b4b;
   font-size: 1.4rem;
   font-weight: 600;
   background-color: #fff;
@@ -132,6 +140,7 @@ body {
   border-radius: 20px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
   display: inline-block;
+  font-family: "Ribeye", serif !important;
 }
 .board {
   display: grid;
@@ -215,4 +224,75 @@ body {
   box-shadow:
     0 0px 0 #111827,
     0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+#red {
+  padding: 5px 10px;
+  font-size: 1rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+  font-family: "Poppins", sans-serif;
+  color: #ffffff;
+  background-color: #3a4a61;
+  border: 1px solid #889bb9;
+  border-radius: 10px;
+  cursor: pointer;
+  box-shadow:
+    0 4px 0 #0b0f1a,
+    0 8px 12px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease-in-out;
+}
+#red:active {
+  transform: translateY(4px);
+  box-shadow:
+    0 0px 0 #111827,
+    0 2px 4px rgba(0, 0, 0, 0.15);
+}
+#red:hover {
+  background-color: #3a4049;
+  border-color: #60656d;
+  transform: translateY(-2px);
+  box-shadow:
+    0 6px 0 #111827,
+    0 12px 16px rgba(0, 0, 0, 0.25);
+}
+
+#yellow {
+  padding: 5px 10px;
+  font-size: 1rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+  font-family: "Poppins", sans-serif;
+  color: #ffffff;
+  background-color: #3a4a61;
+  border: 1px solid #889bb9;
+  border-radius: 10px;
+  cursor: pointer;
+  box-shadow:
+    0 4px 0 #0b0f1a,
+    0 8px 12px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease-in-out;
+}
+#yellow:active {
+  transform: translateY(4px);
+  box-shadow:
+    0 0px 0 #111827,
+    0 2px 4px rgba(0, 0, 0, 0.15);
+}
+#yellow:hover {
+  background-color: #3a4049;
+  border-color: #60656d;
+  transform: translateY(-2px);
+  box-shadow:
+    0 6px 0 #111827,
+    0 12px 16px rgba(0, 0, 0, 0.25);
+}
+#choose {
+  color: #1c1c23;
+  font-size: 1rem;
+  margin-bottom: 4px;
+  letter-spacing: 4px;
+  font-weight: 80;
+  font-weight: bold;
+  font-family: "Silkscreen" !important;
 }
